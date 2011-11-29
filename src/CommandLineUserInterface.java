@@ -16,6 +16,7 @@ public class CommandLineUserInterface implements UserInterface {
 
     private DataStore _dataStore;
     private DataProcessor _dataProcessor;
+    private Log log;
     
     // map of teams to the years they won
     private TreeMap<String, ArrayList<Integer>> winningTeams;
@@ -25,6 +26,7 @@ public class CommandLineUserInterface implements UserInterface {
         _dataProcessor = new DataProcessor(_dataStore);
         _out = System.out;
         _in = new Scanner(System.in);
+        log = Log.getInstance();
     }
     
 	protected Scanner _in;
@@ -45,7 +47,7 @@ public class CommandLineUserInterface implements UserInterface {
 	public void start() {
         
         println("Welcome to the World Series database!");
-        log("Starting application");
+        log.printLog("Starting application");
 
         String choice = null; // the thing that the user chooses to do
 
@@ -53,7 +55,7 @@ public class CommandLineUserInterface implements UserInterface {
             showPrompt();
             
             choice = getInputString();
-            log("User input: " + choice);
+            log.printLog("User input: " + choice);
             
             if (choice.equals("1")) { 
                 // if they want to search by year
@@ -101,14 +103,14 @@ public class CommandLineUserInterface implements UserInterface {
         print("Please enter the year: ");
         try {
             int year = getInputInt();
-            log("Trying to search for year: " + year);
+            log.printLog("Trying to search for year: " + year);
             WorldSeriesInstance wsi = _dataProcessor.showDataForYear(year);
             if (wsi == null) println("No World Series held in " + year);
             else println(wsi.toString());
         }
         catch (Exception e) { 
             println("That is not a valid year.");
-            log("User entered invalid year");
+            log.printLog("User entered invalid year");
         }
     }
 
@@ -124,7 +126,7 @@ public class CommandLineUserInterface implements UserInterface {
     }
 
     public void searchByTeam(String team, String which) {
-        log("Trying to search for: team=" + team + ", which=" + which);
+        log.printLog("Trying to search for: team=" + team + ", which=" + which);
 
         if (which.equalsIgnoreCase("W"))
             println(_dataProcessor.showDataForTeamWins(team));
@@ -141,21 +143,21 @@ public class CommandLineUserInterface implements UserInterface {
         print("Please enter the starting year: ");
         try {
             startYear = getInputInt();
-            log("Trying to search for range starting with: " + startYear);
+            log.printLog("Trying to search for range starting with: " + startYear);
         }
         catch (Exception e) { 
             println("That is not a valid year.");
-            log("User entered invalid year");
+            log.printLog("User entered invalid year");
             return;
         }
         print("Please enter the ending year: ");
         try {
             endYear = getInputInt();
-            log("Trying to search for range starting with: " + endYear);
+            log.printLog("Trying to search for range starting with: " + endYear);
         }
         catch (Exception e) { 
             println("That is not a valid year.");
-            log("User entered invalid year");
+            log.printLog("User entered invalid year");
             return;
         }
         String yearData = _dataProcessor.showDataForRange(startYear, endYear);
@@ -164,7 +166,7 @@ public class CommandLineUserInterface implements UserInterface {
     
     
     public void assembleWinnersByTeam() {
-        log("Trying to assemble winners by team");
+        log.printLog("Trying to assemble winners by team");
 
         ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 
@@ -196,16 +198,6 @@ public class CommandLineUserInterface implements UserInterface {
 
     public void println(String data) {
         _out.println(data);
-    }
-    
-    
-    public void log(String event) {
-        try {
-            FileWriter writer = new FileWriter(new File("log.txt"), true);
-            writer.write(System.currentTimeMillis() + " (UserInterface): " + event +"\n");
-            writer.flush();
-        }
-        catch (Exception e) { e.printStackTrace(); }
     }
 
 }

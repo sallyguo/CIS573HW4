@@ -38,6 +38,4 @@ public interface UserInterface {
 
 	public void println(String data);
 	
-	public void log(String event);
-	
 }

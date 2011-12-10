@@ -16,7 +16,7 @@ public class DataStore {
 		_fileName = fileName;
 		_list = new ArrayList<WorldSeriesInstance>();
 		_resultsCache = new HashMap<String, String>();
-		log = new Log();
+		log = Log.getInstance();
 		readDataFileAndPopulateArrayList();
 	}
 		

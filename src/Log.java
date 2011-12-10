@@ -6,7 +6,7 @@ public class Log {
 	protected static Log singletonInstance = null;
 	FileWriter writer = null;
 	
-	public Log() {
+	private Log() {
 		try {
 			writer = new FileWriter(new File("log.txt"), true);
 		} catch (Exception e) {

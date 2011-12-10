@@ -10,7 +10,7 @@ public class DataProcessor {
 	
 	public DataProcessor(DataStore dataStore) {
 		_dataStore = dataStore;
-		log = new Log();
+		log = Log.getInstance();
 	}
 	
 
@@ -98,7 +98,7 @@ public class DataProcessor {
 		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 		for (WorldSeriesInstance wsi : list) {
 			if (isWin) {
-				if (wsi.winner().toUpperCase().contains(team.toUpperCase())) {
+				if (stringCompare(wsi.winner(), team)) {
 					// we found an instance when the team won
 					result.append(wsi.toString());
 					result.append("\n");
@@ -106,7 +106,7 @@ public class DataProcessor {
 				}
 			}
 			if (isLoss) {
-				if (wsi.loser().toUpperCase().contains(team.toUpperCase())) {
+				if (stringCompare(wsi.loser(), team)) {
 					result.append("In " + wsi.year() + " the " + wsi.loser() + " lost to the " + wsi.winner() + " by " + wsi.score());
 					result.append("\n");
 					losses++;
@@ -147,6 +147,13 @@ public class DataProcessor {
 			_dataStore._resultsCache.put(team+"-all", result.toString());
 		}
 		return result.toString();
+	}
+	
+	private boolean stringCompare(String wsi, String team) {
+		if (wsi.toUpperCase().contains(team.toUpperCase())) 
+			return true;
+		else
+			return false;
 	}
 
 	protected String showDataTeamsYears() {

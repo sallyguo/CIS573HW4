@@ -25,7 +25,7 @@ public abstract class UserInterface {
 	protected UserInterface() {
 		_dataStore = new DataStore("WorldSeries.csv");
 		_dataProcessor = new DataProcessor(_dataStore);
-		log = new Log();
+		log = Log.getInstance();
 	}
 			
 	public void start() {

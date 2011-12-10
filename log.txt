@@ -98,3 +98,13 @@
 1323555794038 (DataProcessor): User input: 4
 1323555794039 (DataProcessor): Trying to display all teams
 1323555794039 (DataProcessor): Trying to assemble winners by team
+1323556697708 (DataProcessor): populating ArrayList
+1323556697750 (DataProcessor): Starting application
+1323556701652 (DataProcessor): User input: 4
+1323556701652 (DataProcessor): Trying to display all teams
+1323556701652 (DataProcessor): Trying to assemble winners by team
+1323556714206 (DataProcessor): populating ArrayList
+1323556714249 (DataProcessor): Starting application
+1323556718529 (DataProcessor): User input: 4
+1323556718529 (DataProcessor): Trying to display all teams
+1323556718530 (DataProcessor): Trying to assemble winners by team

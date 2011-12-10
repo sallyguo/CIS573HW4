@@ -6,18 +6,18 @@ import java.util.TreeMap;
 public class DataProcessor {
 	
 	private DataStore _dataStore;
-	private Log log;
+	private Log _log;
 	private ArrayList<WorldSeriesInstance> list;
 	
 	public DataProcessor(DataStore dataStore) {
 		_dataStore = dataStore;
-		log = Log.getInstance();
+		_log = Log.getInstance();
 		list = _dataStore.allWorldSeriesInstances();
 	}
 	
 
 	public WorldSeriesInstance showDataForYear(int year) {
-		log.log("showing data for year: " + year);
+		_log.log("showing data for year: " + year);
 		WorldSeriesInstance wsi = getDataForYear(year);
 		
 		if (wsi != null) return wsi;
@@ -27,7 +27,7 @@ public class DataProcessor {
 	}
 	
 	private WorldSeriesInstance getDataForYear(int year) {
-		log.log("getting data for year: " + year);
+		_log.log("getting data for year: " + year);
 
 		for (WorldSeriesInstance wsi : list) {
 			if (wsi.year() == year) {
@@ -41,7 +41,7 @@ public class DataProcessor {
 	}
 	
 	public String showDataForRange(int start, int end) {
-		log.log("showing data for range: " + start + " to " + end);
+		_log.log("showing data for range: " + start + " to " + end);
 
 		// make sure we have valid data
 		if (end < start) return "Invalid year range";
@@ -77,17 +77,17 @@ public class DataProcessor {
 
 	public String showDataForTeam(String team, boolean isWin, boolean isLoss) {
 		if (!isLoss) {
-			log.log("showing wins for team: " + team);
+			_log.log("showing wins for team: " + team);
 			String cachedValue = _dataStore.cacheLookup(team+"-wins");
 			if (cachedValue != null) return cachedValue;
 		}
 		else if (!isWin) {
-			log.log("showing losses for team: " + team);
+			_log.log("showing losses for team: " + team);
 			String cachedValue = _dataStore.cacheLookup(team+"-losses");
 			if (cachedValue != null) return cachedValue;
 		}
 		else {
-			log.log("showing wins and losses for team: " + team);
+			_log.log("showing wins and losses for team: " + team);
 			String cachedValue = _dataStore.cacheLookup(team+"-all");
 			if (cachedValue != null) return cachedValue;
 		}
@@ -156,7 +156,7 @@ public class DataProcessor {
 	}
 
 	protected String showDataTeamsYears() {
-		log.log("Trying to display all teams");
+		_log.log("Trying to display all teams");
 		
 		TreeMap<String, ArrayList<Integer>> teams = _dataStore.getWinningTeams();
 		if (_dataStore.getWinningTeams() == null) teams = assembleWinnersByTeam();
@@ -167,13 +167,13 @@ public class DataProcessor {
 			result.append(key + ": ");
 			ArrayList<Integer> years = teams.get(key);
 			for (int i = 0; i < years.size()-1; i++) result.append(years.get(i) + ", ");
-			result.append(years.get(years.size()-1));
+			result.append(years.get(years.size()-1)+"\n");
 		}
 		return result.toString();
 	}
 	
 	protected TreeMap<String, ArrayList<Integer>> assembleWinnersByTeam() {
-		log.log("Trying to assemble winners by team");
+		_log.log("Trying to assemble winners by team");
 
 		TreeMap<String, ArrayList<Integer>> winningTeams = new TreeMap<String, ArrayList<Integer>>();
 		

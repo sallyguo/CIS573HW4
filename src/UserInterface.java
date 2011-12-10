@@ -11,7 +11,7 @@ import java.io.PrintStream;
 public interface UserInterface {
 
 	public String getInputString();
-			
+
 	public void start();
 	
 	public int getInputInt();

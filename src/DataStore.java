@@ -10,13 +10,13 @@ public class DataStore {
 	private ArrayList<WorldSeriesInstance> _list;
 	public HashMap<String, String> _resultsCache; // holds the results of previous searches
 	public TreeMap<String, ArrayList<Integer>> winningTeams;
-	private Log log;
+	private Log _log;
 	
 	public DataStore(String fileName) {
 		_fileName = fileName;
 		_list = new ArrayList<WorldSeriesInstance>();
 		_resultsCache = new HashMap<String, String>();
-		log = Log.getInstance();
+		_log = Log.getInstance();
 		readDataFileAndPopulateArrayList();
 	}
 		
@@ -33,7 +33,7 @@ public class DataStore {
 	}
 	
 	protected void readDataFileAndPopulateArrayList() {
-		log.log("populating ArrayList");
+		_log.log("populating ArrayList");
 		
 		try {
 			Scanner in = new Scanner(new File(_fileName));
@@ -69,7 +69,7 @@ public class DataStore {
 	}
 
 	public String cacheLookup(String key) {
-		log.log("Looking in cache for key: " + key);
+		_log.log("Looking in cache for key: " + key);
 		if (_resultsCache.containsKey(key)) return _resultsCache.get(key); 
 		else return null;
 	}

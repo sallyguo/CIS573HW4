@@ -89,3 +89,12 @@
 1323553497196 (DataProcessor): showing data for year: 2000
 1323553497196 (DataProcessor): getting data for year: 2000
 1323553497197 (DataProcessor): User input: 
+1323555772622 (DataProcessor): populating ArrayList
+1323555772673 (DataProcessor): Starting application
+1323555777531 (DataProcessor): User input: 2
+1323555782404 (DataProcessor): Trying to search for: team=yankees, which=a
+1323555782405 (DataProcessor): showing wins and losses for team: yankees
+1323555782405 (DataProcessor): Looking in cache for key: yankees-all
+1323555794038 (DataProcessor): User input: 4
+1323555794039 (DataProcessor): Trying to display all teams
+1323555794039 (DataProcessor): Trying to assemble winners by team

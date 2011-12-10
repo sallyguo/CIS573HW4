@@ -7,10 +7,12 @@ public class DataProcessor {
 	
 	private DataStore _dataStore;
 	private Log log;
+	private ArrayList<WorldSeriesInstance> list;
 	
 	public DataProcessor(DataStore dataStore) {
 		_dataStore = dataStore;
 		log = Log.getInstance();
+		list = _dataStore.allWorldSeriesInstances();
 	}
 	
 
@@ -26,8 +28,6 @@ public class DataProcessor {
 	
 	private WorldSeriesInstance getDataForYear(int year) {
 		log.log("getting data for year: " + year);
-		// look through all the instances
-		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 
 		for (WorldSeriesInstance wsi : list) {
 			if (wsi.year() == year) {
@@ -95,7 +95,6 @@ public class DataProcessor {
 		int losses = 0;
 		StringBuffer result = new StringBuffer();
 		
-		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 		for (WorldSeriesInstance wsi : list) {
 			if (isWin) {
 				if (stringCompare(wsi.winner(), team)) {
@@ -175,8 +174,6 @@ public class DataProcessor {
 	
 	protected TreeMap<String, ArrayList<Integer>> assembleWinnersByTeam() {
 		log.log("Trying to assemble winners by team");
-
-		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 
 		TreeMap<String, ArrayList<Integer>> winningTeams = new TreeMap<String, ArrayList<Integer>>();
 		

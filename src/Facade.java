@@ -11,7 +11,7 @@ public class Facade {
 	}
 	
 	Facade(){
-		_log = new Log();
+		_log = Log.getInstance();
 		_dataStore = new DataStore("WorldSeries.csv");
 		_dataProcessor = new DataProcessor(_dataStore);
 		_cli = new CommandLineUserInterface(_dataProcessor);

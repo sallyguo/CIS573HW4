@@ -148,7 +148,7 @@ public class CommandLineUserInterface implements UserInterface {
         catch (Exception e) { 
             println("That is not a valid year.");
             log.printLog("User entered invalid year");
-            return;
+            return;	
         }
         print("Please enter the ending year: ");
         try {

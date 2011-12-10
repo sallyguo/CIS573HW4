@@ -24,7 +24,19 @@ public interface UserInterface {
 	
 	public String askUserForTeamName();
 
+<<<<<<< HEAD
 	public void searchByTeam();
+=======
+		if (which.equalsIgnoreCase("W"))
+			println(_dataProcessor.showDataForTeam(team, true, false));
+		else if (which.equalsIgnoreCase("L"))
+			println(_dataProcessor.showDataForTeam(team, false, true));
+		else if (which.equalsIgnoreCase("A"))
+			println(_dataProcessor.showDataForTeam(team, true, true));
+		else
+			println(which + " is not a valid selection.");
+	}
+>>>>>>> a0f6ba6de8f41d236b796b4d3f249b45fce7922e
 	
 	public void searchByRange();
 	

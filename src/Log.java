@@ -13,6 +13,7 @@ public class Log {
 			e.printStackTrace();
 		}
 	}
+	
 	public static Log getInstance() {
 		if (singletonInstance == null)
 			singletonInstance = new Log();

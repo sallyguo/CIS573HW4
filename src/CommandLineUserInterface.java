@@ -55,7 +55,6 @@ public class CommandLineUserInterface implements UserInterface {
 		println("4: Show all teams' World Series wins");
 		println("Q: Quit");
 		print("> ");
-
 	}
 
 	public void searchByYear() {

@@ -25,16 +25,18 @@ public abstract class UserInterface {
 	
 	// map of teams to the years they won
 	private TreeMap<String, ArrayList<Integer>> winningTeams;
+	private Log log;
 	
 	protected UserInterface() {
 		_dataStore = new DataStore("WorldSeries.csv");
 		_dataProcessor = new DataProcessor(_dataStore);
+		log = new Log();
 	}
 			
 	public void start() {
 		
 		println("Welcome to the World Series database!");
-		log("Starting application");
+		log.log("Starting application");
 
 		String choice = null; // the thing that the user chooses to do
 
@@ -42,7 +44,7 @@ public abstract class UserInterface {
 			showPrompt();
 			
 			choice = getInputString();
-			log("User input: " + choice);
+			log.log("User input: " + choice);
 			
 			if (choice.equals("1")) { 
 				// if they want to search by year
@@ -93,14 +95,14 @@ public abstract class UserInterface {
 		print("Please enter the year: ");
 		try {
 			int year = getInputInt();
-			log("Trying to search for year: " + year);
+			log.log("Trying to search for year: " + year);
 			WorldSeriesInstance wsi = _dataProcessor.showDataForYear(year);
 			if (wsi == null) println("No World Series held in " + year);
 			else println(wsi.toString());
 		}
 		catch (Exception e) { 
 			println("That is not a valid year.");
-			log("User entered invalid year");
+			log.log("User entered invalid year");
 		}
 	}
 
@@ -116,7 +118,7 @@ public abstract class UserInterface {
 	}
 
 	protected void searchByTeam(String team, String which) {
-		log("Trying to search for: team=" + team + ", which=" + which);
+		log.log("Trying to search for: team=" + team + ", which=" + which);
 
 		if (which.equalsIgnoreCase("W"))
 			println(_dataProcessor.showDataForTeamWins(team));
@@ -133,21 +135,21 @@ public abstract class UserInterface {
 		print("Please enter the starting year: ");
 		try {
 			startYear = getInputInt();
-			log("Trying to search for range starting with: " + startYear);
+			log.log("Trying to search for range starting with: " + startYear);
 		}
 		catch (Exception e) { 
 			println("That is not a valid year.");
-			log("User entered invalid year");
+			log.log("User entered invalid year");
 			return;
 		}
 		print("Please enter the ending year: ");
 		try {
 			endYear = getInputInt();
-			log("Trying to search for range starting with: " + endYear);
+			log.log("Trying to search for range starting with: " + endYear);
 		}
 		catch (Exception e) { 
 			println("That is not a valid year.");
-			log("User entered invalid year");
+			log.log("User entered invalid year");
 			return;
 		}
 		String yearData = _dataProcessor.showDataForRange(startYear, endYear);
@@ -156,7 +158,7 @@ public abstract class UserInterface {
 	
 	
 	protected void assembleWinnersByTeam() {
-		log("Trying to assemble winners by team");
+		log.log("Trying to assemble winners by team");
 
 		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 
@@ -189,15 +191,4 @@ public abstract class UserInterface {
 	public void println(String data) {
 		_out.println(data);
 	}
-	
-	
-	protected void log(String event) {
-		try {
-			FileWriter writer = new FileWriter(new File("log.txt"), true);
-			writer.write(System.currentTimeMillis() + " (UserInterface): " + event +"\n");
-			writer.flush();
-		}
-		catch (Exception e) { e.printStackTrace(); }
-	}
-	
 }

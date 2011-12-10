@@ -8,14 +8,16 @@ import java.util.TreeMap;
 public class DataProcessor {
 	
 	private DataStore _dataStore;
+	private Log log;
 	
 	public DataProcessor(DataStore dataStore) {
 		_dataStore = dataStore;
+		log = new Log();
 	}
 	
 
 	public WorldSeriesInstance showDataForYear(int year) {
-		log("showing data for year: " + year);
+		log.log("showing data for year: " + year);
 		WorldSeriesInstance wsi = getDataForYear(year);
 		
 		if (wsi != null) return wsi;
@@ -25,7 +27,7 @@ public class DataProcessor {
 	}
 	
 	private WorldSeriesInstance getDataForYear(int year) {
-		log("getting data for year: " + year);
+		log.log("getting data for year: " + year);
 		// look through all the instances
 		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 
@@ -41,7 +43,7 @@ public class DataProcessor {
 	}
 	
 	public String showDataForRange(int start, int end) {
-		log("showing data for range: " + start + " to " + end);
+		log.log("showing data for range: " + start + " to " + end);
 
 		// make sure we have valid data
 		if (end < start) {
@@ -80,7 +82,7 @@ public class DataProcessor {
 
 
 	public String showDataForTeamWins(String team) {
-		log("showing wins for team: " + team);
+		log.log("showing wins for team: " + team);
 
 		
 		// look in the cache first
@@ -122,7 +124,7 @@ public class DataProcessor {
 	}
 	
 	public String showDataForTeamLosses(String team) {
-		log("showing losses for team: " + team);
+		log.log("showing losses for team: " + team);
 
 		// look in the cache first
 		if (_dataStore.lookup(team+"-losses") != null) {
@@ -163,7 +165,7 @@ public class DataProcessor {
 	}
 			
 	public String showDataForTeamAll(String team) {
-		log("showing wins and losses for team: " + team);
+		log.log("showing wins and losses for team: " + team);
 
 		// look in the cache first
 		if (_dataStore.lookup(team+"-all") != null) {
@@ -211,7 +213,7 @@ public class DataProcessor {
 	
 	
 	protected void displayTeams(TreeMap<String, ArrayList<Integer>> teams, UserInterface ui) {
-		log("Trying to display all teams");
+		log.log("Trying to display all teams");
 
 		Set<String> keys = teams.keySet();
 		for (String key : keys) {
@@ -223,15 +225,4 @@ public class DataProcessor {
 
 		
 	}
-
-
-	protected void log(String event) {
-		try {
-			FileWriter writer = new FileWriter(new File("log.txt"), true);
-			writer.write(System.currentTimeMillis() + " (DataProcessor): " + event +"\n");
-			writer.flush();
-		}
-		catch (Exception e) { e.printStackTrace(); }
-	}
-
 }

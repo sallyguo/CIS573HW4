@@ -19,7 +19,7 @@ public class Log {
 		return singletonInstance;
 	}
 	
-	public void printLog(String event) {
+	public void log(String event) {
 		try {
 			writer.write(System.currentTimeMillis() + " (DataProcessor): " + event +"\n");
 			writer.flush();

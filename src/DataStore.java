@@ -1,14 +1,15 @@
 import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class DataStore {
 	
 	private final String _fileName;
 	private ArrayList<WorldSeriesInstance> _list;
 	public HashMap<String, String> _resultsCache; // holds the results of previous searches
+	public TreeMap<String, ArrayList<Integer>> winningTeams;
 	private Log log;
 	
 	public DataStore(String fileName) {
@@ -21,6 +22,14 @@ public class DataStore {
 		
 	public ArrayList<WorldSeriesInstance> allWorldSeriesInstances() { 
 		return _list; 
+	}
+	
+	public TreeMap<String, ArrayList<Integer>> getWinningTeams() {
+		return winningTeams;
+	}
+	
+	public void setWinningTeams(TreeMap<String, ArrayList<Integer>> winningTeams) {
+		this.winningTeams = winningTeams;
 	}
 	
 	protected void readDataFileAndPopulateArrayList() {
@@ -59,10 +68,14 @@ public class DataStore {
 		return new WorldSeriesInstance(year, winner, loser, score);
 	}
 
-	public String lookup(String key) {
+	public String cacheLookup(String key) {
 		log.log("Looking in cache for key: " + key);
 		if (_resultsCache.containsKey(key)) return _resultsCache.get(key); 
 		else return null;
+	}
+	
+	public void cacheStore(String key, String value){
+		_resultsCache.put(key, value);
 	}
 	
 }

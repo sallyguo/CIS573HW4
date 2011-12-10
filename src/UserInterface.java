@@ -1,8 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.TreeMap;
 
 /*
  * This class is declared abstract because the getInputString and getInputInt methods
@@ -24,7 +20,6 @@ public abstract class UserInterface {
 	private DataProcessor _dataProcessor;
 	
 	// map of teams to the years they won
-	private TreeMap<String, ArrayList<Integer>> winningTeams;
 	private Log log;
 	
 	protected UserInterface() {
@@ -46,23 +41,10 @@ public abstract class UserInterface {
 			choice = getInputString();
 			log.log("User input: " + choice);
 			
-			if (choice.equals("1")) { 
-				// if they want to search by year
-				searchByYear();	
-			}
-			else if (choice.equals("2")) {
-				// search by team
-				searchByTeam(askUserForTeamName(), askUserForWinLossOrAll());
-			}
-			else if (choice.equals("3")) {
-				// for a range of years
-				searchByRange();
-			}
-			else if (choice.equals("4")) {
-				// show all the teams and the years they won a World Series
-				assembleWinnersByTeam();
-				_dataProcessor.displayTeams(winningTeams, this);
-			}
+			if (choice.equals("1")) searchByYear();	
+			else if (choice.equals("2")) searchByTeam();
+			else if (choice.equals("3")) searchByRange();
+			else if (choice.equals("4")) showTeamsYears();
 			else if (!quit(choice)) {
 				println("That is not a valid selection.");
 			}
@@ -72,12 +54,9 @@ public abstract class UserInterface {
 		println("Good bye");
 	}
 
-	
 	protected static boolean quit(String choice) {
 		return choice.equals("Q") || choice.equals("q");
 	}
-	
-	
 	
 	protected void showPrompt() {
 		println("");
@@ -117,7 +96,9 @@ public abstract class UserInterface {
 		return getInputString();
 	}
 
-	protected void searchByTeam(String team, String which) {
+	protected void searchByTeam() {
+		String team = askUserForTeamName();
+		String which = askUserForWinLossOrAll();
 		log.log("Trying to search for: team=" + team + ", which=" + which);
 
 		if (which.equalsIgnoreCase("W"))
@@ -156,28 +137,9 @@ public abstract class UserInterface {
 		println(yearData);
 	}
 	
-	
-	protected void assembleWinnersByTeam() {
-		log.log("Trying to assemble winners by team");
-
-		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
-
-		winningTeams = new TreeMap<String, ArrayList<Integer>>();
-		
-		for (WorldSeriesInstance wsi : list) {
-
-			// see if the winner is already in the list of teams
-			if (winningTeams.containsKey(wsi.winner())) {
-				winningTeams.get(wsi.winner()).add(wsi.year());
-			}
-			else {
-				// create an entry in the wins list
-				ArrayList<Integer> newEntry = new ArrayList<Integer>();
-				newEntry.add(wsi.year());
-				winningTeams.put(wsi.winner(), newEntry);
-			}
-		}
-				
+	protected void showTeamsYears(){
+		String teamYearsData = _dataProcessor.showDataTeamsYears();
+		println(teamYearsData);
 	}
 	
 	public void print(String data) {

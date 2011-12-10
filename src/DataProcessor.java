@@ -1,5 +1,3 @@
-import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
@@ -46,14 +44,11 @@ public class DataProcessor {
 		log.log("showing data for range: " + start + " to " + end);
 
 		// make sure we have valid data
-		if (end < start) {
-			return "Invalid year range";
-		}
+		if (end < start) return "Invalid year range";
 				
 		// look in the cache first
-		if (_dataStore.lookup(start+"-"+end) != null) {
-			return _dataStore._resultsCache.get(start+"-"+end);
-		}
+		String cachedValue = _dataStore.cacheLookup(start+"-"+end);
+		if (cachedValue != null) return cachedValue;
 		
 		StringBuffer result = new StringBuffer();
 		
@@ -74,7 +69,7 @@ public class DataProcessor {
 			return "No World Series held between " + start + " and " + end;
 		}
 		else {
-			_dataStore._resultsCache.put(start+"-"+end, result.toString());
+			_dataStore.cacheStore(start+"-"+end, result.toString());
 			return result.toString();
 		}
 		
@@ -86,7 +81,7 @@ public class DataProcessor {
 
 		
 		// look in the cache first
-		if (_dataStore.lookup(team+"-wins") != null) {
+		if (_dataStore.cacheLookup(team+"-wins") != null) {
 			return _dataStore._resultsCache.get(team+"-wins");
 		}
 		
@@ -127,7 +122,7 @@ public class DataProcessor {
 		log.log("showing losses for team: " + team);
 
 		// look in the cache first
-		if (_dataStore.lookup(team+"-losses") != null) {
+		if (_dataStore.cacheLookup(team+"-losses") != null) {
 			return _dataStore._resultsCache.get(team+"-losses");
 		}
 		
@@ -168,7 +163,7 @@ public class DataProcessor {
 		log.log("showing wins and losses for team: " + team);
 
 		// look in the cache first
-		if (_dataStore.lookup(team+"-all") != null) {
+		if (_dataStore.cacheLookup(team+"-all") != null) {
 			return _dataStore._resultsCache.get(team+"-all");
 		}
 
@@ -211,18 +206,43 @@ public class DataProcessor {
 		
 	}
 	
-	
-	protected void displayTeams(TreeMap<String, ArrayList<Integer>> teams, UserInterface ui) {
+	protected String showDataTeamsYears() {
 		log.log("Trying to display all teams");
+		
+		TreeMap<String, ArrayList<Integer>> teams = _dataStore.getWinningTeams();
+		if (_dataStore.getWinningTeams() == null) teams = assembleWinnersByTeam();
 
+		StringBuffer result = new StringBuffer();
 		Set<String> keys = teams.keySet();
 		for (String key : keys) {
-			ui.print(key + ": ");
+			result.append(key + ": ");
 			ArrayList<Integer> years = teams.get(key);
-			for (int i = 0; i < years.size()-1; i++) ui.print(years.get(i) + ", ");
-			ui.println(years.get(years.size()-1));
+			for (int i = 0; i < years.size()-1; i++) result.append(years.get(i) + ", ");
+			result.append(years.get(years.size()-1));
 		}
+		return result.toString();
+	}
+	
+	protected TreeMap<String, ArrayList<Integer>> assembleWinnersByTeam() {
+		log.log("Trying to assemble winners by team");
 
+		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
+
+		TreeMap<String, ArrayList<Integer>> winningTeams = new TreeMap<String, ArrayList<Integer>>();
 		
+		for (WorldSeriesInstance wsi : list) {
+			// see if the winner is already in the list of teams
+			if (winningTeams.containsKey(wsi.winner())) {
+				winningTeams.get(wsi.winner()).add(wsi.year());
+			}
+			else {
+				// create an entry in the wins list
+				ArrayList<Integer> newEntry = new ArrayList<Integer>();
+				newEntry.add(wsi.year());
+				winningTeams.put(wsi.winner(), newEntry);
+			}
+		}	
+		_dataStore.setWinningTeams(winningTeams);
+		return winningTeams;
 	}
 }

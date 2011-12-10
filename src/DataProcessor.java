@@ -75,137 +75,80 @@ public class DataProcessor {
 		
 	}
 
-
-	public String showDataForTeamWins(String team) {
-		log.log("showing wins for team: " + team);
-
-		
-		// look in the cache first
-		if (_dataStore.cacheLookup(team+"-wins") != null) {
-			return _dataStore._resultsCache.get(team+"-wins");
+	public String showDataForTeam(String team, boolean isWin, boolean isLoss) {
+		if (!isLoss) {
+			log.log("showing wins for team: " + team);
+			String cachedValue = _dataStore.cacheLookup(team+"-wins");
+			if (cachedValue != null) return cachedValue;
 		}
-		
-		// to hold the result
-		StringBuffer result = new StringBuffer();
-	
-		// keep track of the number of wins for the team
+		else if (!isWin) {
+			log.log("showing losses for team: " + team);
+			String cachedValue = _dataStore.cacheLookup(team+"-losses");
+			if (cachedValue != null) return cachedValue;
+		}
+		else {
+			log.log("showing wins and losses for team: " + team);
+			String cachedValue = _dataStore.cacheLookup(team+"-all");
+			if (cachedValue != null) return cachedValue;
+		}
 		int wins = 0;
-			
-		// look through all the instances
-		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
-		for (WorldSeriesInstance wsi : list) {
-			// convert to uppercase and use "contains" for partial matching
-			if (wsi.winner().toUpperCase().contains(team.toUpperCase())) {
-				// we found an instance when the team won
-				result.append(wsi.toString());
-				result.append("\n");
-				wins++;
-			}
-		}
-		// if none found, print a message
-		if (wins == 0) {
-			result.append("The " + team + " have not won any World Series");
-			result.append("\n");
-		}
-		else {
-			result.append("The " + team + " have won " + wins + " World Series");
-			result.append("\n");
-		}
-		
-		// put it in the cache
-		_dataStore._resultsCache.put(team+"-wins", result.toString());
-
-		return result.toString();
-	}
-	
-	public String showDataForTeamLosses(String team) {
-		log.log("showing losses for team: " + team);
-
-		// look in the cache first
-		if (_dataStore.cacheLookup(team+"-losses") != null) {
-			return _dataStore._resultsCache.get(team+"-losses");
-		}
-		
-		// to hold the result
-		StringBuffer result = new StringBuffer();
-
-		// keep track of the number of losses for the team
 		int losses = 0;
-		
-		// look through all the instances
-		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
-		for (WorldSeriesInstance wsi : list) {
-			// convert to uppercase and use "contains" for partial matching
-			if (wsi.loser().toUpperCase().contains(team.toUpperCase())) {
-				result.append("In " + wsi.year() + " the " + wsi.loser() + " lost to the " + wsi.winner() + " by " + wsi.score());
-				result.append("\n");
-				losses++;
-			}	
-		}
-		// if none found, print a message
-		if (losses == 0) {
-			result.append("The " + team + " have not lost any World Series");
-			result.append("\n");
-			}
-		else {
-			result.append("The " + team + " have lost " + losses + " World Series");
-			result.append("\n");
-		}
-
-		// put it in the cache
-		_dataStore._resultsCache.put(team+"-losses", result.toString());
-		
-		return result.toString();
-
-	}
-			
-	public String showDataForTeamAll(String team) {
-		log.log("showing wins and losses for team: " + team);
-
-		// look in the cache first
-		if (_dataStore.cacheLookup(team+"-all") != null) {
-			return _dataStore._resultsCache.get(team+"-all");
-		}
-
-		// to hold the result
 		StringBuffer result = new StringBuffer();
-
-		// keep track of the number of wins and losses for the team
-		int wins = 0, losses = 0;
-			
-		// look through all the instances
+		
 		ArrayList<WorldSeriesInstance> list = _dataStore.allWorldSeriesInstances();
 		for (WorldSeriesInstance wsi : list) {
-			// convert to uppercase and use "contains" for partial matching
-			if (wsi.winner().toUpperCase().contains(team.toUpperCase())) {
-				// we found an instance when the team won
-				result.append(wsi.toString());
-				result.append("\n");
-				wins++;
+			if (isWin) {
+				if (wsi.winner().toUpperCase().contains(team.toUpperCase())) {
+					// we found an instance when the team won
+					result.append(wsi.toString());
+					result.append("\n");
+					wins++;
+				}
 			}
-			else if (wsi.loser().toUpperCase().contains(team.toUpperCase())) {
-				result.append("In " + wsi.year() + " the " + wsi.loser() + " lost to the " + wsi.winner() + " by " + wsi.score());
-				result.append("\n");
-				losses++;
+			if (isLoss) {
+				if (wsi.loser().toUpperCase().contains(team.toUpperCase())) {
+					result.append("In " + wsi.year() + " the " + wsi.loser() + " lost to the " + wsi.winner() + " by " + wsi.score());
+					result.append("\n");
+					losses++;
+				}
 			}
 		}
-		// if none found, print a message
-		if (wins + losses == 0) {
-			result.append("The " + team + " have not played in any World Series");
-			result.append("\n");
+		if (!isLoss) {
+			if (wins == 0) {
+				result.append("The " + team + " have not won any World Series");
+				result.append("\n");
+			}
+			else {
+				result.append("The " + team + " have won " + wins + " World Series");
+				result.append("\n");
+			}
+			_dataStore._resultsCache.put(team+"-wins", result.toString());
+		}
+		else if (!isWin) {
+			if (losses == 0) {
+				result.append("The " + team + " have not lost any World Series");
+				result.append("\n");
+				}
+			else {
+				result.append("The " + team + " have lost " + losses + " World Series");
+				result.append("\n");
+			}
+			_dataStore._resultsCache.put(team+"-losses", result.toString());
 		}
 		else {
-			result.append("The " + team + " have won " + wins + " World Series and lost " + losses);
-			result.append("\n");
+			if (wins + losses == 0) {
+				result.append("The " + team + " have not played in any World Series");
+				result.append("\n");
+			}
+			else {
+				result.append("The " + team + " have won " + wins + " World Series and lost " + losses);
+				result.append("\n");
+			}
+			_dataStore._resultsCache.put(team+"-all", result.toString());
 		}
-		
-		// put it in the cache
-		_dataStore._resultsCache.put(team+"-all", result.toString());
-		
 		return result.toString();
-		
 	}
-	
+
 	protected String showDataTeamsYears() {
 		log.log("Trying to display all teams");
 		

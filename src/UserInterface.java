@@ -102,11 +102,11 @@ public abstract class UserInterface {
 		log.log("Trying to search for: team=" + team + ", which=" + which);
 
 		if (which.equalsIgnoreCase("W"))
-			println(_dataProcessor.showDataForTeamWins(team));
+			println(_dataProcessor.showDataForTeam(team, true, false));
 		else if (which.equalsIgnoreCase("L"))
-			println(_dataProcessor.showDataForTeamLosses(team));
+			println(_dataProcessor.showDataForTeam(team, false, true));
 		else if (which.equalsIgnoreCase("A"))
-			println(_dataProcessor.showDataForTeamAll(team));
+			println(_dataProcessor.showDataForTeam(team, true, true));
 		else
 			println(which + " is not a valid selection.");
 	}

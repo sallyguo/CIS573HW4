@@ -18,12 +18,7 @@ public class DataProcessor {
 
 	public WorldSeriesInstance showDataForYear(int year) {
 		_log.log("showing data for year: " + year);
-		WorldSeriesInstance wsi = getDataForYear(year);
-		
-		if (wsi != null) return wsi;
-		// if we made it here, we didn't find it
-		else return null;
-		
+		return getDataForYear(year);
 	}
 	
 	private WorldSeriesInstance getDataForYear(int year) {
@@ -121,7 +116,7 @@ public class DataProcessor {
 				result.append("The " + team + " have won " + wins + " World Series");
 				result.append("\n");
 			}
-			_dataStore._resultsCache.put(team+"-wins", result.toString());
+			_dataStore.cacheStore(team+"-wins", result.toString());
 		}
 		else if (!isWin) {
 			if (losses == 0) {
@@ -132,7 +127,7 @@ public class DataProcessor {
 				result.append("The " + team + " have lost " + losses + " World Series");
 				result.append("\n");
 			}
-			_dataStore._resultsCache.put(team+"-losses", result.toString());
+			_dataStore.cacheStore(team+"-losses", result.toString());
 		}
 		else {
 			if (wins + losses == 0) {
@@ -143,7 +138,7 @@ public class DataProcessor {
 				result.append("The " + team + " have won " + wins + " World Series and lost " + losses);
 				result.append("\n");
 			}
-			_dataStore._resultsCache.put(team+"-all", result.toString());
+			_dataStore.cacheStore(team+"-all", result.toString());
 		}
 		return result.toString();
 	}
@@ -155,7 +150,7 @@ public class DataProcessor {
 			return false;
 	}
 
-	protected String showDataTeamsYears() {
+	public String showDataTeamsYears() {
 		_log.log("Trying to display all teams");
 		
 		TreeMap<String, ArrayList<Integer>> teams = _dataStore.getWinningTeams();

@@ -8,8 +8,8 @@ public class DataStore {
 	
 	private final String _fileName;
 	private ArrayList<WorldSeriesInstance> _list;
-	public HashMap<String, String> _resultsCache; // holds the results of previous searches
-	public TreeMap<String, ArrayList<Integer>> winningTeams;
+	private HashMap<String, String> _resultsCache; // holds the results of previous searches
+	private TreeMap<String, ArrayList<Integer>> winningTeams;
 	private Log _log;
 	
 	public DataStore(String fileName) {

@@ -36,5 +36,5 @@ public interface UserInterface {
 
 	public void println(String data);
 	
-	public PrintStream getPrintstream();
+	public PrintStream out();
 }

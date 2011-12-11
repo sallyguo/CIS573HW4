@@ -5,14 +5,12 @@ import java.util.Scanner;
 public class CommandLineUserInterface implements UserInterface {
 	
 	protected Scanner _in;
-	protected PrintStream _out;
 	protected Log _log;
 	protected DataProcessor _dataProcessor;
 	
 	public CommandLineUserInterface(DataProcessor dataProcessor) {
 		_log = Log.getInstance();
 		_in = new Scanner(System.in);
-		_out = getPrintstream();
 		_dataProcessor = dataProcessor;
 	}
 	
@@ -129,15 +127,15 @@ public class CommandLineUserInterface implements UserInterface {
 	}
 	
 	public void print(String data) {
-		_out.print(data);
+		out().print(data);
 	}
 
 	public void println(int data) {
-		_out.println(data);
+		out().println(data);
 	}
 
 	public void println(String data) {
-		_out.println(data);
+		out().println(data);
 	}
 	
 	public String getInputString() {
@@ -148,7 +146,7 @@ public class CommandLineUserInterface implements UserInterface {
 		return _in.nextInt();
 	}
 	
-	public PrintStream getPrintstream() {
+	public PrintStream out() {
 		return System.out;
 	}
 }

@@ -7,12 +7,12 @@ public class DataProcessor {
 	
 	private DataStore _dataStore;
 	private Log _log;
-	private ArrayList<WorldSeriesInstance> list;
+	private ArrayList<WorldSeriesInstance> _list;
 	
 	public DataProcessor(DataStore dataStore) {
 		_dataStore = dataStore;
 		_log = Log.getInstance();
-		list = _dataStore.allWorldSeriesInstances();
+		_list = _dataStore.allWorldSeriesInstances();
 	}
 	
 
@@ -24,7 +24,7 @@ public class DataProcessor {
 	private WorldSeriesInstance getDataForYear(int year) {
 		_log.log("getting data for year: " + year);
 
-		for (WorldSeriesInstance wsi : list) {
+		for (WorldSeriesInstance wsi : _list) {
 			if (wsi.year() == year) {
 				// found it!
 				return wsi;
@@ -90,7 +90,7 @@ public class DataProcessor {
 		int losses = 0;
 		StringBuffer result = new StringBuffer();
 		
-		for (WorldSeriesInstance wsi : list) {
+		for (WorldSeriesInstance wsi : _list) {
 			if (isWin) {
 				if (stringCompare(wsi.winner(), team)) {
 					// we found an instance when the team won
@@ -172,7 +172,7 @@ public class DataProcessor {
 
 		TreeMap<String, ArrayList<Integer>> winningTeams = new TreeMap<String, ArrayList<Integer>>();
 		
-		for (WorldSeriesInstance wsi : list) {
+		for (WorldSeriesInstance wsi : _list) {
 			// see if the winner is already in the list of teams
 			if (winningTeams.containsKey(wsi.winner())) {
 				winningTeams.get(wsi.winner()).add(wsi.year());
